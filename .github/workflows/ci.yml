@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: webhooks
+          POSTGRES_PASSWORD: local-development-only
+          POSTGRES_DB: webhooks
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U webhooks -d webhooks"
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet restore WebhookDelivery.slnx
+      - run: dotnet build WebhookDelivery.slnx --configuration Release --no-restore
+      - run: dotnet test WebhookDelivery.slnx --configuration Release --no-build
+      - run: docker build --tag webhook-delivery:test .
+      - run: docker build --file SampleReceiver/Dockerfile --tag webhook-receiver:test .

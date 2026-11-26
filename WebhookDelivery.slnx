@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="WebhookDelivery/WebhookDelivery.csproj" />
+  <Project Path="SampleReceiver/SampleReceiver.csproj" />
+  <Project Path="WebhookDeliveryTests/WebhookDeliveryTests.csproj" />
+</Solution>

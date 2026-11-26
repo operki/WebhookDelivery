@@ -1,0 +1,13 @@
+**/bin/
+**/obj/
+**/.idea/
+**/.vs/
+*.user
+TestResults/
+artifacts/
+.env
+.env.*
+!.env.example
+
+# BEGIN managed oversized files (over 50 MB)
+# END managed oversized files
